@@ -1,0 +1,101 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      2364,         91]
+NotebookOptionsPosition[      2035,         75]
+NotebookOutlinePosition[      2392,         91]
+CellTagsIndexPosition[      2349,         88]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"xleft", ":=", 
+   RowBox[{"Function", "[", 
+    RowBox[{
+     RowBox[{"{", "f", "}"}], ",", 
+     RowBox[{
+      RowBox[{"D", "[", 
+       RowBox[{"f", ",", "x"}], "]"}], "-", 
+      RowBox[{"y", "*", 
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{"f", ",", "z"}], "]"}], "/", "2"}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"yleft", ":=", 
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"{", "f", "}"}], ",", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"f", ",", "y"}], "]"}], "+", 
+       RowBox[{"x", "*", 
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{"f", ",", "z"}], "]"}], "/", "2"}]}]}]}], "]"}]}], ";"}], 
+  " "}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{"lapl", ":=", 
+  RowBox[{"Function", "[", 
+   RowBox[{
+    RowBox[{"{", "f", "}"}], ",", 
+    RowBox[{
+     RowBox[{"xleft", "[", 
+      RowBox[{"xleft", "[", "f", "]"}], "]"}], "+", 
+     RowBox[{"yleft", "[", 
+      RowBox[{"yleft", "[", "f", "]"}], "]"}]}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"laplnew", ":=", 
+  RowBox[{"Function", "[", 
+   RowBox[{
+    RowBox[{"{", "f", "}"}], ",", 
+    RowBox[{
+     RowBox[{"t", "/", "2"}], "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"xleft", "[", 
+        RowBox[{"xleft", "[", "f", "]"}], "]"}], "+", 
+       RowBox[{"yleft", "[", 
+        RowBox[{"yleft", "[", "f", "]"}], "]"}]}], ")"}]}]}], 
+   "]"}]}]], "Input"]
+},
+WindowSize->{740, 587},
+WindowMargins->{{114, Automatic}, {Automatic, 11}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 766, 27, 46, "Input"],
+Cell[1326, 49, 304, 9, 28, "Input"],
+Cell[1633, 60, 398, 13, 28, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
