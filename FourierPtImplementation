@@ -1,60 +1,32 @@
-
-
-(*This is a modified file according to Colin's Pis2Notebook. You could set \
-the degree of the Laplician polynomial *)
+(*This is a modified file according to Colin's Pis2Notebook. You could set the degree of the Laplician polynomial *)
 
 (*Basic set-up*)
 
-
 ClearAll[f]
-
 ClearAll[frac]
-
-xleft := Function[{f}, D[f, x] - y*D[f, z]/2];
-yleft := Function[{f}, D[f, y] + x*D[f, z]/2]; 
-xright := Function[{f}, D[f, x] + y*D[f, z]/2];
-yright := Function[{f}, D[f, y] - x*D[f, z]/2];
-
-laplsquare := Function[{f}, (xleft[f])^2 + (yleft[f])^2]
-
-(*Here is the new operator which replaces the polylapl operator*)
-fourierpt := 
- Function[{f}, 
-  Normal[2*\[Pi]*
-    Integrate[
-     Sum[SeriesCoefficient[f, {z, 0, 2*j}]*(-1)^j*(2*j)!*
-       SeriesCoefficient[(
-        w E^((-(x^2 + y^2) w Coth[w*t/2])/4))/((8 \[Pi]^2) Sinh[w*t/2]), {w, 
-         0, 2*j}], {j, 0, 
-       Floor[Exponent[f, z]/
-         2]}], {x, -\[Infinity], \[Infinity]}, {y, -\[Infinity], \
-\[Infinity]}]]]
+xleft:=Function[{f},D[f,x]-y*D[f,z]/2];
+yleft:=Function[{f},D[f,y]+x*D[f,z]/2]; 
+xright:=Function[{f},D[f,x]+y*D[f,z]/2];
+yright:=Function[{f},D[f,y]-x*D[f,z]/2];
+laplsquare:=Function[{f},(xleft[f])^2+(yleft[f])^2]
+fourierpt:=Function[{f},Normal[2*\[Pi]*Integrate[Sum[SeriesCoefficient[f,{z,0,2*j}]*(-1)^j*(2*j)!*SeriesCoefficient[(w E^((-(x^2+y^2) w Coth[w*t/2])/4))/((8 \[Pi]^2) Sinh[w*t/2]),{w,0,2*j}],{j,0,Floor[Exponent[f,z]/2]}],{x,-\[Infinity],\[Infinity]},{y,-\[Infinity],\[Infinity]}]]]
 
 (*Set function*)
-
-g[x_, y_, z_] = 
- Subscript[a, 200] x^2 + Subscript[a, 020] y^2 + Subscript[a, 002] z^2 + 
-  Subscript[a, 110] x*y + Subscript[a, 101] x*z + Subscript[a, 011] y*z + 
-  Subscript[a, 100] x + Subscript[a, 010] y + Subscript[a, 001] z(* + 
-  Subscript[a, 300] x^3 + Subscript[a, 030] y^3 + Subscript[a, 003] z^3 + 
-  Subscript[a, 120] x*y^2 + Subscript[a, 102] x*z^2 + 
-  Subscript[a, 210] x^2*y + Subscript[a, 201] x^2*z + 
-  Subscript[a, 021] y^2*z + Subscript[a, 012] y*z^2 + 
-  Subscript[a, 111] x*y*z +Subscript[a, 400]x^4+Subscript[a, 310]x^3*y+
-   Subscript[a, 301]x^3*z+Subscript[a, 220]x^2*y^2+Subscript[a, 202]x^2*z^2+
-   Subscript[a, 130]x*y^3+Subscript[a, 103]x*z^3+Subscript[a, 040]y^4+
-   Subscript[a, 031]y^3*z+Subscript[a, 022]y^2*z^2+Subscript[a, 013]y*z^3+
-   Subscript[a, 004]z^4+Subscript[a, 211]x^2*y*z+Subscript[a, 121]x*y^2*z+
-   Subscript[a, 112]x*y*z^2 *)
+g[x_,y_,z_]=Subscript[a, 011]y*z+Subscript[a, 100]x+Subscript[a, 300] x^3+Subscript[a, 120]x*y^2+Subscript[a, 102]x*z^2+Subscript[a, 031] y^3*z+Subscript[a, 013]y*z^3+Subscript[a, 211] x^2*y*z+Subscript[a, 500] x^5+Subscript[a, 320] x^3*y^2+Subscript[a, 302] x^3*z^2+Subscript[a, 140]x*y^4+Subscript[a, 122]x*y^2*z^2+Subscript[a, 104]x*z^4
+y z Subscript[a, 11]+y z^3 Subscript[a, 13]+y^3 z Subscript[a, 31]+x Subscript[a, 100]+x z^2 Subscript[a, 102]+x z^4 Subscript[a, 104]+x y^2 Subscript[a, 120]+x y^2 z^2 Subscript[a, 122]+x y^4 Subscript[a, 140]+x^2 y z Subscript[a, 211]+x^3 Subscript[a, 300]+x^3 z^2 Subscript[a, 302]+x^3 y^2 Subscript[a, 320]+x^5 Subscript[a, 500]
 
 (*The numerator*)
-numerator[t_] = (fourierpt[xright[g[x, y, z]]])^2 + (fourierpt[
-    yright[g[x, y, z]]])^2
+numerator[t_]=(fourierpt[xright[g[x,y,z]]])^2+(fourierpt[yright[g[x,y,z]]])^2
 
 (*The denominator*)
-denominator[t_] = fourierpt[laplsquare[g[x, y, z]]]
 
-(*The fraction*)
-frac[t_] = 
- Simplify[((fourierpt[xright[g[x, y, z]]])^2 + (fourierpt[
-       yright[g[x, y, z]]])^2)/(fourierpt[laplsquare[g[x, y, z]]])]
+denominator[t_]=fourierpt[laplsquare[g[x,y,z]]]
+(*The fraction, here timed to figure out the computational rate and how it scales with degree and the number of coefficients*)
+frac[t_]=Timing[Simplify[((fourierpt[xright[g[x,y,z]]])^2+(fourierpt[yright[g[x,y,z]]])^2)/(fourierpt[laplsquare[g[x,y,z]]])]]
+
+Timing[FindMaximum[{(35 (48 Subscript[a, 100]+t (24 Subscript[a, 11]+48 (Subscript[a, 120]+3 Subscript[a, 300])+t (5 t (6 Subscript[a, 13]+3 t Subscript[a, 104]+4 (Subscript[a, 122]+3 Subscript[a, 302]))+12 (6 Subscript[a, 31]+Subscript[a, 102]+2 (6 Subscript[a, 140]+Subscript[a, 211]+6 Subscript[a, 320]+30 Subscript[a, 500])))))^2)/(3 t^8 ((26880 Subsuperscript[a, 100, 2])/t^8+3093585 Subsuperscript[a, 104, 2]-(26880 Subscript[a, 100] (Subscript[a, 11]-2 (Subscript[a, 120]+3 Subscript[a, 300])))/t^7+(12 Subscript[a, 104] (6925 Subscript[a, 13]+130106 (Subscript[a, 122]+3 Subscript[a, 302])))/t+1/t^228 (12831 Subsuperscript[a, 13, 2]-1324 Subscript[a, 13] (Subscript[a, 122]+3 Subscript[a, 302])+2 (5958 Subscript[a, 31] Subscript[a, 104]+11507 Subscript[a, 102] Subscript[a, 104]+15194 Subsuperscript[a, 122, 2]+3972 Subscript[a, 104] Subscript[a, 140]+1986 Subscript[a, 104] Subscript[a, 211]+25092 Subscript[a, 122] Subscript[a, 302]+70674 Subsuperscript[a, 302, 2]+3972 Subscript[a, 104] Subscript[a, 320]+19860 Subscript[a, 104] Subscript[a, 500]))+1/t^52240 (-15 Subscript[a, 13] Subscript[a, 100]+Subscript[a, 11] (138 Subscript[a, 31]+5 Subscript[a, 102]-36 Subscript[a, 140]+46 Subscript[a, 211]-36 Subscript[a, 320]-180 Subscript[a, 500])+2 (5 Subscript[a, 100] Subscript[a, 122]+468 Subscript[a, 120] Subscript[a, 140]+18 Subscript[a, 120] Subscript[a, 211]+108 Subscript[a, 140] Subscript[a, 300]-54 Subscript[a, 211] Subscript[a, 300]-54 Subscript[a, 31] (Subscript[a, 120]+Subscript[a, 300])+5 Subscript[a, 102] (Subscript[a, 120]+3 Subscript[a, 300])+15 Subscript[a, 100] Subscript[a, 302]+252 Subscript[a, 120] Subscript[a, 320]+324 Subscript[a, 300] Subscript[a, 320]+180 Subscript[a, 120] Subscript[a, 500]+2700 Subscript[a, 300] Subscript[a, 500]))+1/t^3336 (183 Subscript[a, 11] Subscript[a, 104]+Subscript[a, 13] (1986 Subscript[a, 31]-61 Subscript[a, 102]-540 Subscript[a, 140]+662 Subscript[a, 211]-540 Subscript[a, 320]-2700 Subscript[a, 500])+2 (421 Subscript[a, 102] Subscript[a, 122]+2340 Subscript[a, 122] Subscript[a, 140]-90 Subscript[a, 122] Subscript[a, 211]+61 Subscript[a, 104] (Subscript[a, 120]+3 Subscript[a, 300])+1263 Subscript[a, 102] Subscript[a, 302]+540 Subscript[a, 140] Subscript[a, 302]+270 Subscript[a, 211] Subscript[a, 302]+270 Subscript[a, 31] (Subscript[a, 122]+Subscript[a, 302])+1260 Subscript[a, 122] Subscript[a, 320]+1620 Subscript[a, 302] Subscript[a, 320]+900 Subscript[a, 122] Subscript[a, 500]+13500 Subscript[a, 302] Subscript[a, 500]))+1/t^66720 (5 Subsuperscript[a, 11, 2]-4 Subscript[a, 11] (Subscript[a, 120]+3 Subscript[a, 300])+2 (-6 Subscript[a, 31] Subscript[a, 100]+2 (7 Subsuperscript[a, 120, 2]+6 Subscript[a, 120] Subscript[a, 300]+27 Subsuperscript[a, 300, 2])+Subscript[a, 100] (Subscript[a, 102]+12 Subscript[a, 140]-2 Subscript[a, 211]+12 Subscript[a, 320]+60 Subscript[a, 500])))+1/t^4560 (2196 Subsuperscript[a, 31, 2]+127 Subsuperscript[a, 102, 2]+30 Subscript[a, 100] Subscript[a, 104]-84 Subscript[a, 13] Subscript[a, 120]+392 Subscript[a, 120] Subscript[a, 122]+168 Subscript[a, 102] Subscript[a, 140]+16560 Subsuperscript[a, 140, 2]+28 Subscript[a, 102] Subscript[a, 211]+1008 Subscript[a, 140] Subscript[a, 211]+484 Subsuperscript[a, 211, 2]-252 Subscript[a, 13] Subscript[a, 300]+168 Subscript[a, 122] Subscript[a, 300]+168 Subscript[a, 120] Subscript[a, 302]+1512 Subscript[a, 300] Subscript[a, 302]+2 Subscript[a, 11] (99 Subscript[a, 13]+14 (Subscript[a, 122]+3 Subscript[a, 302]))+168 Subscript[a, 102] Subscript[a, 320]+11232 Subscript[a, 140] Subscript[a, 320]+144 Subscript[a, 211] Subscript[a, 320]+6768 Subsuperscript[a, 320, 2]+840 Subscript[a, 102] Subscript[a, 500]+4320 Subscript[a, 140] Subscript[a, 500]-3600 Subscript[a, 211] Subscript[a, 500]+21600 Subscript[a, 320] Subscript[a, 500]+126000 Subsuperscript[a, 500, 2]+12 Subscript[a, 31] (7 Subscript[a, 102]-2 (90 Subscript[a, 140]-31 Subscript[a, 211]+54 Subscript[a, 320]+90 Subscript[a, 500]))))),t>0},{{Subscript[a, 100],1.0},{Subscript[a, 11],1.0},{Subscript[a, 300],-0.00361},{Subscript[a, 120],-0.00361},{Subscript[a, 102],-0.1917},{Subscript[a, 211],-0.0571991},{Subscript[a, 31],-0.0571991},{Subscript[a, 13],-0.0152},{Subscript[a, 500],0},{Subscript[a, 140],0},{Subscript[a, 104],0},{Subscript[a, 320],0},{Subscript[a, 122],0},{Subscript[a, 302],0},{t,0.937344}}]]
+
+{1.138807,{2.41818,{Subscript[a, 100]->1.00509,Subscript[a, 11]->0.918385,Subscript[a, 300]->-0.00661497,Subscript[a, 120]->-0.00661496,Subscript[a, 102]->-0.148902,Subscript[a, 211]->-0.0510347,Subscript[a, 31]->-0.0510347,Subscript[a, 13]->-0.00867862,Subscript[a, 500]->-0.000481725,Subscript[a, 140]->-0.000481726,Subscript[a, 104]->0.000860714,Subscript[a, 320]->-0.000963451,Subscript[a, 122]->0.00824447,Subscript[a, 302]->0.00824447,t->1.15695}}}
+
+f[x_,y_,z_]=g[x,y,z]/.{Subscript[a, 100]->1.0050926627553078`,Subscript[a, 11]->0.9183852404322038`,Subscript[a, 300]->-0.006614972566474315`,Subscript[a, 120]->-0.006614962655599971`,Subscript[a, 102]->-0.14890247996617642`,Subscript[a, 211]->-0.05103469661974544`,Subscript[a, 31]->-0.05103469494940109`,Subscript[a, 13]->-0.008678619760034903`,Subscript[a, 500]->-0.0004817249588664864`,Subscript[a, 140]->-0.000481725615874964`,Subscript[a, 104]->0.0008607136534695332`,Subscript[a, 320]->-0.000963450596382003`,Subscript[a, 122]->0.008244473684766107`,Subscript[a, 302]->0.008244473988804239`}
+1.00509 x-0.00661497 x^3-0.000481725 x^5-0.00661496 x y^2-0.000963451 x^3 y^2-0.000481726 x y^4+0.918385 y z-0.0510347 x^2 y z-0.0510347 y^3 z-0.148902 x z^2+0.00824447 x^3 z^2+0.00824447 x y^2 z^2-0.00867862 y z^3+0.000860714 x z^4
