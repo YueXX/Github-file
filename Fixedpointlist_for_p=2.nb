@@ -24,3 +24,6 @@ frac2[x_,y_,z_,t_]=numera[x,y,z,t]/denomina[x,y,z,t]
 (1/4 (2+t-y^2)^2+((x y)/2+z)^2)/((5 t^2)/4+(1-y^2/2)^2+1/2 t (2 x^2+2 y^2-2 (1-y^2/2))+((x y)/2+z)^2)
 frac2[0,0,0,t]
 (2+t)^2/(4 (1-t+(5 t^2)/4))
+
+makePolynomial[term_]:=Sum[Subscript[b, i,j,k ](x^i)*(y^j)*(z^k)Boole[i+j+k <=term],
+{i,0,term},{j,0,term},{k,0,term},Assumptions -> Element[{i,j,k},Integers]  ]
