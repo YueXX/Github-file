@@ -1,6 +1,6 @@
 xleft:=Function[{f},D[f,x]-y*D[f,z]/2];
 yleft:=Function[{f},D[f,y]+x*D[f,z]/2]; 
-lapl:=Function[{f},xleft[xleft[f]]+yleft[yleft[f]]]
+lapl:=Function[{f},Expand[xleft[xleft[f]]+yleft[yleft[f]]]]
 laplsquare:=Function[{f},(xleft[f])^2+(yleft[f])^2]
 laplnew:=Function[{f},t/2*(xleft[xleft[f]]+yleft[yleft[f]])]
 
