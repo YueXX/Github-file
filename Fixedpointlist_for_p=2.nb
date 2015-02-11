@@ -1,3 +1,4 @@
+ClearAll[t,a,b,c,d,f,x,y,z,poly]
 xleft:=Function[{f},D[f,x]-y*D[f,z]/2];
 yleft:=Function[{f},D[f,y]+x*D[f,z]/2]; 
 lapl:=Function[{f},Expand[xleft[xleft[f]]+yleft[yleft[f]]]]
@@ -6,24 +7,22 @@ laplnew:=Function[{f},t/2*(xleft[xleft[f]]+yleft[yleft[f]])]
 
 (*set function f*)
 f[x_,y_,z_]=x+y*z
-
 x+y z
-list=FixedPointList[lapl,f[x,y,z]]
-{x+y z,x,0,0}
-
-polysum=Sum[Extract[list,{i}]*(t/2)^(i-1)/(i-1)!,{i,1,Length[list]}]
-x+(t x)/2+y z
+list:=Function[{f},FixedPointList[lapl,f]];
+polysum:=Function[{f},Sum[Extract[list[f],{i}]*(t/2)^(i-1)/(i-1)!,{i,1,Length[list]}]]
 (*Numerator below*)
-numera[x_,y_,z_,t_]=FullSimplify[laplsquare[polysum]]
-1/4 (2+t-y^2)^2+((x y)/2+z)^2
+numera:=Function[{f},laplsquare[polysum[f]]];
 (*Denominator*)
-list2=FixedPointList[lapl,laplsquare[f[x,y,z]]]
-denomina[x_,y_,z_,t_]=Sum[Extract[list2,{i}]*(t/2)^(i-1)/(i-1)!,{i,1,Length[list2]}]
-(5 t^2)/4+(1-y^2/2)^2+1/2 t (2 x^2+2 y^2-2 (1-y^2/2))+((x y)/2+z)^2
-frac2[x_,y_,z_,t_]=numera[x,y,z,t]/denomina[x,y,z,t]
-(1/4 (2+t-y^2)^2+((x y)/2+z)^2)/((5 t^2)/4+(1-y^2/2)^2+1/2 t (2 x^2+2 y^2-2 (1-y^2/2))+((x y)/2+z)^2)
-frac2[0,0,0,t]
-(2+t)^2/(4 (1-t+(5 t^2)/4))
+list2:=Function[{f},FixedPointList[lapl,laplsquare[f]]];
+denomina:=Function[{f},Sum[Extract[list2[f],{i}]*(t/2)^(i-1)/(i-1)!,{i,1,Length[list2[f]]}]];
+(*All in one function to set for the value (0,0,0,t )and the function,eg. x+y*z *)
+fraction[a_,b_,c_,d_,f_]:=( numera[f]/denomina[f]) /. {x -> a, y -> b, z -> c,t -> d}
 
-makePolynomial[term_]:=Sum[Subscript[b, i,j,k ](x^i)*(y^j)*(z^k)Boole[i+j+k <=term],
-{i,0,term},{j,0,term},{k,0,term},Assumptions -> Element[{i,j,k},Integers]  ]
+makePolynomial[degree_]:=Sum[Subscript[b, i,j,k](x^i)*(y^j)*(z^k)Boole[i+j+k<=degree],{i,0,degree},{j,0,degree},{k,0,degree},Assumptions->Element[{i,j,k},Integers]]
+makePolynomial[3]
+
+i=1
+1
+
+makeGrid[degree_,number_]:=While[i<number+1,(Subscript[poly, i]=makePolynomial[degree];Subscript[frac, i]=fraction[0,0,0,t,Subscript[poly, i]];Print[Subscript[poly, i]];Print[Subscript[frac, i]];i++)]
+Timing[makeGrid[5,10]]
