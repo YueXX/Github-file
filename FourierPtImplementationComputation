@@ -1,0 +1,27 @@
+(*This is a modified file according to Colin's old Pis2Notebook and Yue's corrections. It is still assumed that p=2, although here the Subscript[P, t] operator is derived from the Fourier transform identity and it is applied to polynomial functions. *)
+
+(*Basic set-up*)
+
+ClearAll[f, frac]
+xleft:=Function[{f},D[f,x]-y*D[f,z]/2];
+yleft:=Function[{f},D[f,y]+x*D[f,z]/2]; 
+xright:=Function[{f},D[f,x]+y*D[f,z]/2];
+yright:=Function[{f},D[f,y]-x*D[f,z]/2];
+laplsquare:=Function[{f},(xleft[f])^2+(yleft[f])^2]
+fourierpt:=Function[{f},Normal[2*\[Pi]*Integrate[Sum[SeriesCoefficient[f,{z,0,2*j}]*(-1)^j*(2*j)!*SeriesCoefficient[(w E^((-(x^2+y^2) w Coth[w*t/2])/4))/((8 \[Pi]^2) Sinh[w*t/2]),{w,0,2*j}],{j,0,Floor[Exponent[f,z]/2]}],{x,-\[Infinity],\[Infinity]},{y,-\[Infinity],\[Infinity]}]]]
+
+(*Set function*)
+g[x_,y_,z_]=Subscript[a, 011]y*z+Subscript[a, 100]x+Subscript[a, 300] x^3+Subscript[a, 120]x*y^2+Subscript[a, 102]x*z^2+Subscript[a, 031] y^3*z+Subscript[a, 013]y*z^3+Subscript[a, 211] x^2*y*z+Subscript[a, 500] x^5+Subscript[a, 320] x^3*y^2+Subscript[a, 302] x^3*z^2+Subscript[a, 140]x*y^4+Subscript[a, 122]x*y^2*z^2+Subscript[a, 104]x*z^4 + Subscript[a, 411] x^4*y*z+Subscript[a, 231] x^2*y^3*z+Subscript[a, 213] x^2*y*z^3+Subscript[a, 051] y^5*z+Subscript[a, 033] y^3*z^3+Subscript[a, 015]y*z^5+Subscript[a, 600] x^6+Subscript[a, 501] x^5*z+Subscript[a, 402] x^4*z^2+Subscript[a, 420] x^4*y^2+Subscript[a, 303] x^3*z^3+Subscript[a, 321] (x^3)*(y^2)*z  (*  +Subscript[a, 700]x^7+Subscript[a, 160]x*y^6+Subscript[a, 106]x*z^6+Subscript[a, 520]x^5*y^2+Subscript[a, 502]x^5*z^2+Subscript[a, 340]x^3*y^4+Subscript[a, 322]x^3*y^2*z^2+Subscript[a, 304]x^3*z^4+Subscript[a, 142]x*y^4*z^2+Subscript[a, 124]x*y^2*z^4  *)
+
+(*The numerator*)
+numerator[t_]=(fourierpt[xright[g[x,y,z]]])^2+(fourierpt[yright[g[x,y,z]]])^2
+
+(*The denominator*)
+denominator[t_]=fourierpt[laplsquare[g[x,y,z]]]
+
+(*The fraction, here timed to figure out the computational rate and how it scales with degree and the number of coefficients*)
+frac[t_]=Simplify[((fourierpt[xright[g[x,y,z]]])^2+(fourierpt[yright[g[x,y,z]]])^2)/(fourierpt[laplsquare[g[x,y,z]]])]
+
+(* Here the frac[t] was derived from a 6th-order polynomial, giving the best ratio so far in FindMaximum: 2.56602 *)
+FindMaximum[{frac[t],t>0},{{Subscript[a, 100],1},{Subscript[a, 11],1},{Subscript[a, 300],0},{Subscript[a, 120],0},{Subscript[a, 102],0},{Subscript[a, 211],0},{Subscript[a, 31],0},{Subscript[a, 13],0},{Subscript[a, 500],0},{Subscript[a, 140],0},{Subscript[a, 104],0},{Subscript[a, 320],0},{Subscript[a, 122],0},{Subscript[a, 302],0},{Subscript[a, 411],0},{Subscript[a, 231],0},{Subscript[a, 213],0},{Subscript[a, 051],0},{Subscript[a, 033],0},{Subscript[a, 015],0},{t,1}}]
+{2.56602,{Subscript[a, 100]->0.86923,Subscript[a, 11]->0.78981,Subscript[a, 300]->-0.0111062,Subscript[a, 120]->-0.0111062,Subscript[a, 102]->-0.0848698,Subscript[a, 211]->-0.06547,Subscript[a, 31]->-0.06547,Subscript[a, 13]->-0.0105006,Subscript[a, 500]->-0.000027528,Subscript[a, 140]->-0.0000275279,Subscript[a, 104]->0.000355255,Subscript[a, 320]->-0.000055056,Subscript[a, 122]->0.00382411,Subscript[a, 302]->0.00382411,Subscript[a, 411]->0.00157995,Subscript[a, 231]->0.00315991,Subscript[a, 213]->0.000432291,Subscript[a, 51]->0.00157995,Subscript[a, 33]->0.000432291,Subscript[a, 15]->0.0000318495,t->1.4486}}
