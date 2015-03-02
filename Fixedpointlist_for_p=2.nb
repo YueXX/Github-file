@@ -20,6 +20,7 @@ fraction[a_,b_,c_,d_,f_]:=( numera[f]/denomina[f]) /. {x -> a, y -> b, z -> c,t 
 
 makePolynomial[degree_]:=Sum[Subscript[b, i,j,k](x^i)*(y^j)*(z^k)Boole[i+j+k<=degree],{i,0,degree},{j,0,degree},{k,0,degree},Assumptions->Element[{i,j,k},Integers]]
 makePolynomial[3]
+makeRestrictedPolynomial[degree_]:=Sum[Subscript[b,i,j,k]*(x^i)*(y^j)*(z^k)Boole[i+j+k<=degree]Boole[(Mod[i,2]!=Mod[j,2] )&&(Mod[i,2]!=Mod[k,2])],{i,0,degree},{j,0,degree},{k,0,degree},Assumptions->Element[{i,j,k},Integers]]
 
 i=1
 1
